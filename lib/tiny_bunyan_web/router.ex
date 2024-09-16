@@ -16,6 +16,12 @@ defmodule TinyBunyanWeb.Router do
 
   scope "/", TinyBunyanWeb do
     pipe_through :browser
+    live "/logs", LogLive.Index, :index
+    live "/logs/new", LogLive.Index, :new
+    live "/logs/:id/edit", LogLive.Index, :edit
+
+    live "/logs/:id", LogLive.Show, :show
+    live "/logs/:id/show/edit", LogLive.Show, :edit
 
     get "/", PageController, :home
   end

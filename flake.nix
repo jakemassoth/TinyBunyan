@@ -9,8 +9,7 @@
       devShells."aarch64-darwin".default = pkgs.mkShell {
         packages = [ pkgs.elixir ];
         shellHook = ''
-          mix local.hex
-          mix archive.install hex phx_new
+          mix deps.get
           export SHELL=$(which zsh)
           exec $SHELL
         '';
