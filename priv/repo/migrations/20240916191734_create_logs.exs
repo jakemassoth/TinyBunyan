@@ -11,4 +11,7 @@ defmodule TinyBunyan.Repo.Migrations.CreateLogs do
       timestamps(type: :utc_datetime)
     end
   end
+  def down do
+    drop table(:logs)
+  end
 end

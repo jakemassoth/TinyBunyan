@@ -5,7 +5,6 @@ defmodule TinyBunyan.Logs.Log do
   schema "logs" do
     field :content, :map
     field :fired_at, :utc_datetime
-    field :ingested_at, :utc_datetime 
     field :uuid, Ecto.UUID, autogenerate: true
 
     timestamps(type: :utc_datetime)
@@ -14,8 +13,7 @@ defmodule TinyBunyan.Logs.Log do
   @doc false
   def changeset(log, attrs) do
     log
-    |> cast(attrs, [:content, :uuid, :ingested_at, :fired_at, :content])
-    |> put_change(:ingested_at, DateTime.utc_now())
+    |> cast(attrs, [:content, :uuid, :fired_at, :content])
     |> validate_required([:content, :fired_at])
   end
 end

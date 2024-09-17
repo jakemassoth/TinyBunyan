@@ -4,9 +4,16 @@ defmodule TinyBunyan.Logs do
   """
 
   import Ecto.Query, warn: false
+  alias Phoenix.PubSub
   alias TinyBunyan.Repo
 
   alias TinyBunyan.Logs.Log
+
+  @topic inspect(__MODULE__)
+
+  def subscribe do
+    PubSub.subscribe(TinyBunyan.PubSub, @topic)
+  end
 
   @doc """
   Returns the list of logs.
@@ -50,9 +57,12 @@ defmodule TinyBunyan.Logs do
 
   """
   def create_log(attrs \\ %{}) do
-    %Log{}
-    |> Log.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, result} <- 
+      %Log{}
+      |> Log.changeset(attrs)
+      |> Repo.insert() do
+      notify_subscribers({:ok, result}, :created)
+    end
   end
 
   @doc """
@@ -100,5 +110,10 @@ defmodule TinyBunyan.Logs do
   """
   def change_log(%Log{} = log, attrs \\ %{}) do
     Log.changeset(log, attrs)
+  end
+
+  defp notify_subscribers({:ok, result}, event) do
+    PubSub.broadcast(TinyBunyan.PubSub, @topic, {__MODULE__, event, result})
+    {:ok, result}
   end
 end

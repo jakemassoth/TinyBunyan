@@ -27,9 +27,10 @@ defmodule TinyBunyanWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", TinyBunyanWeb do
-  #   pipe_through :api
-  # end
+  scope "/api/v1", TinyBunyanWeb do
+    pipe_through :api
+    resources "/logs", LogController, except: [:new, :edit]
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:tiny_bunyan, :dev_routes) do
