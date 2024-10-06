@@ -32,38 +32,8 @@ defmodule TinyBunyanWeb.LogLive.FormComponent do
   end
 
   @impl true
-  def update(%{log: log} = assigns, socket) do
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign_new(:form, fn ->
-       to_form(Logs.change_log(log))
-     end)}
-  end
-
-  @impl true
-  def handle_event("validate", %{"log" => log_params}, socket) do
-    changeset = Logs.change_log(socket.assigns.log, log_params)
-    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
-  end
-
   def handle_event("save", %{"log" => log_params}, socket) do
     save_log(socket, socket.assigns.action, log_params)
-  end
-
-  defp save_log(socket, :edit, log_params) do
-    case Logs.update_log(socket.assigns.log, log_params) do
-      {:ok, log} ->
-        notify_parent({:saved, log})
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Log updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
-    end
   end
 
   defp save_log(socket, :new, log_params) do

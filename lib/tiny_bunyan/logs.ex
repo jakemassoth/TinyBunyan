@@ -6,6 +6,7 @@ defmodule TinyBunyan.Logs do
   import Ecto.Query, warn: false
   alias Phoenix.PubSub
   alias TinyBunyan.Repo
+  alias TinyBunyan.EphemeralRepo
 
   alias TinyBunyan.Logs.Log
 
@@ -24,7 +25,9 @@ defmodule TinyBunyan.Logs do
   """
   def list_logs(project_id) do
     from(l in Log, where: l.project_id == ^project_id)
-    |> Repo.all()
+    |> Repo.all() 
+    |> Enum.concat(EphemeralRepo.get_logs(project_id))
+    |> Enum.sort_by(& &1.fired_at)
   end
 
   @doc """
@@ -41,10 +44,12 @@ defmodule TinyBunyan.Logs do
       ** (Ecto.NoResultsError)
 
   """
-  def get_log!(id, project_id) do
-    from(l in Log, where: l.project_id == ^project_id and l.id == ^id)
+  def get_log!(uuid, project_id) do
+    from(l in Log, where: l.project_id == ^project_id and l.uuid == ^uuid)
     |> Repo.one!()
   end
+
+  defguardp should_save(_log) when false
 
   @doc """
   Creates a log.
@@ -58,7 +63,9 @@ defmodule TinyBunyan.Logs do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_log(attrs \\ %{}) do
+  def create_log(attrs \\ %{})
+
+  def create_log(attrs) when should_save(attrs) do
     with {:ok, result} <- 
       %Log{}
       |> Log.changeset(attrs)
@@ -67,51 +74,13 @@ defmodule TinyBunyan.Logs do
     end
   end
 
-  @doc """
-  Updates a log.
-
-  ## Examples
-
-      iex> update_log(log, %{field: new_value})
-      {:ok, %Log{}}
-
-      iex> update_log(log, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_log(%Log{} = log, attrs) do
-    log
-    |> Log.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a log.
-
-  ## Examples
-
-      iex> delete_log(log)
-      {:ok, %Log{}}
-
-      iex> delete_log(log)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_log(%Log{} = log) do
-    Repo.delete(log)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking log changes.
-
-  ## Examples
-
-      iex> change_log(log)
-      %Ecto.Changeset{data: %Log{}}
-
-  """
-  def change_log(%Log{} = log, attrs \\ %{}) do
-    Log.changeset(log, attrs)
+  def create_log(attrs) when not should_save(attrs) do
+    with {:ok, result} <- 
+      %Log{}
+      |> Log.changeset(attrs)
+      |> EphemeralRepo.append_log() do
+      notify_subscribers({:ok, result}, :created)
+    end
   end
 
   defp notify_subscribers({:ok, result}, event) do

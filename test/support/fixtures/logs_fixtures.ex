@@ -9,13 +9,18 @@ defmodule TinyBunyan.LogsFixtures do
   geenrates a log
   """
   def log_fixture(attrs \\ %{}) do
-    project = project_fixture()
+
+    # don't create a project if we pass a project id 
+    project_id = case attrs do
+      {project_id} -> project_id
+      _ -> project_fixture().project_id
+    end
 
     {:ok, log} = attrs
      |> Enum.into(%{
        fired_at: DateTime.utc_now(),
        content: %{},
-       project_id: project.project_id
+       project_id: project_id
      })
       |> TinyBunyan.Logs.create_log()
 

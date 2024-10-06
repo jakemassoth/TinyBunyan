@@ -17,7 +17,6 @@ defmodule TinyBunyanWeb.LogJSON do
 
   defp data(%Log{} = log) do
     %{
-      id: log.id,
       content: log.content,
       fired_at: log.fired_at,
       uuid: log.uuid,

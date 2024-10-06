@@ -27,7 +27,6 @@ defmodule TinyBunyanWeb.LogLive.Index do
 
   @impl true
   def handle_info({TinyBunyan.Logs, :created, _}, socket) do
-    IO.puts("got new log")
     {:noreply, fetch(socket)}
   end
 
