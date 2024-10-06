@@ -20,7 +20,8 @@ defmodule TinyBunyanWeb.LogJSON do
       id: log.id,
       content: log.content,
       fired_at: log.fired_at,
-      uuid: log.uuid
+      uuid: log.uuid,
+      project_id: log.project_id
     }
   end
 end

@@ -10,4 +10,4 @@
   <:item title="Fired at"><%= @log.fired_at %></:item>
 </.list>
 
-<.back navigate={~p"/logs"}>Back to logs</.back>
+<.back navigate={~p"/projects/#{@log.project_id}/logs"}>Back to logs</.back>

@@ -16,20 +16,20 @@ defmodule TinyBunyanWeb.Router do
 
   scope "/", TinyBunyanWeb do
     pipe_through :browser
-    live "/logs", LogLive.Index, :index
-    live "/logs/new", LogLive.Index, :new
-    live "/logs/:id/edit", LogLive.Index, :edit
-
-    live "/logs/:id", LogLive.Show, :show
-    live "/logs/:id/show/edit", LogLive.Show, :edit
 
     get "/", PageController, :home
+    resources "/users", UserController
+    resources "/projects", ProjectController do
+      live "/logs", LogLive.Index, :index
+      live "/logs/:id", LogLive.Show, :show
+    end
   end
 
-  # Other scopes may use custom stacks.
   scope "/api/v1", TinyBunyanWeb do
     pipe_through :api
-    resources "/logs", LogController, except: [:new, :edit]
+    resources "/projects", ProjectController do
+      resources "/logs", LogController, except: [:new, :edit]
+    end
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

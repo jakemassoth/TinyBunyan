@@ -15,7 +15,10 @@
           mix local.hex --force
           mix local.rebar --force
           mix deps.get
+
+          # build mac_listener so live reload works
           clang -framework CoreFoundation -framework CoreServices -Wno-deprecated-declarations deps/file_system/c_src/mac/*.c -o priv/mac_listener
+
           export SHELL=$(which zsh)
           export MIX_HOME=$PWD/.nix-mix
           export HEX_HOME=$PWD/.nix-hex

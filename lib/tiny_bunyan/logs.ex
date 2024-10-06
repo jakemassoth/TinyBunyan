@@ -9,10 +9,8 @@ defmodule TinyBunyan.Logs do
 
   alias TinyBunyan.Logs.Log
 
-  @topic inspect(__MODULE__)
-
-  def subscribe do
-    PubSub.subscribe(TinyBunyan.PubSub, @topic)
+  def subscribe(project_id) do
+    PubSub.subscribe(TinyBunyan.PubSub, "logs:#{project_id}")
   end
 
   @doc """
@@ -24,8 +22,9 @@ defmodule TinyBunyan.Logs do
       [%Log{}, ...]
 
   """
-  def list_logs do
-    Repo.all(Log)
+  def list_logs(project_id) do
+    from(l in Log, where: l.project_id == ^project_id)
+    |> Repo.all()
   end
 
   @doc """
@@ -42,7 +41,10 @@ defmodule TinyBunyan.Logs do
       ** (Ecto.NoResultsError)
 
   """
-  def get_log!(id), do: Repo.get!(Log, id)
+  def get_log!(id, project_id) do
+    from(l in Log, where: l.project_id == ^project_id and l.id == ^id)
+    |> Repo.one!()
+  end
 
   @doc """
   Creates a log.
@@ -113,7 +115,11 @@ defmodule TinyBunyan.Logs do
   end
 
   defp notify_subscribers({:ok, result}, event) do
-    PubSub.broadcast(TinyBunyan.PubSub, @topic, {__MODULE__, event, result})
+    PubSub.broadcast(
+      TinyBunyan.PubSub, 
+      "logs:#{result.project_id}", 
+      {__MODULE__, event, result}
+    )
     {:ok, result}
   end
 end

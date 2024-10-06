@@ -1,18 +1,15 @@
 defmodule TinyBunyan.LogsTest do
   use TinyBunyan.DataCase
   alias TinyBunyan.Logs
+  import TinyBunyan.LogsFixtures
+  import TinyBunyan.ProjectsFixtures
 
   describe "logs" do
     test "create a log" do
-      Logs.subscribe()
+      project = project_fixture()
+      Logs.subscribe(project.project_id)
       
-      res = Logs.create_log(%{
-        content: %{foo: "bar"},
-        fired_at: DateTime.utc_now()
-      })
-
-      assert match?({:ok, _}, res)
-      
+      log_fixture(%{project_id: project.project_id})
       assert_receive {TinyBunyan.Logs, :created, _}
     end
 

@@ -6,8 +6,8 @@ defmodule TinyBunyanWeb.LogController do
 
   action_fallback TinyBunyanWeb.FallbackController
 
-  def index(conn, _params) do
-    logs = Logs.list_logs()
+  def index(conn, %{"project_id" => project_id}) do
+    logs = Logs.list_logs(project_id)
     render(conn, :index, logs: logs)
   end
 
@@ -15,26 +15,25 @@ defmodule TinyBunyanWeb.LogController do
     with {:ok, %Log{} = log} <- Logs.create_log(log_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/logs/#{log}")
+      |> put_resp_header("location", ~p"/api/v1/projects/#{log.project_id}/logs/#{log}")
       |> render(:show, log: log)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    log = Logs.get_log!(id)
+  def show(conn, %{"id" => id, "project_id" => project_id}) do
+    log = Logs.get_log!(id, project_id)
     render(conn, :show, log: log)
   end
 
-  def update(conn, %{"id" => id, "log" => log_params}) do
-    log = Logs.get_log!(id)
-
+  def update(conn, %{"id" => id, "log" => log_params, "project_id" => project_id}) do
+    log = Logs.get_log!(id, project_id)
     with {:ok, %Log{} = log} <- Logs.update_log(log, log_params) do
       render(conn, :show, log: log)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    log = Logs.get_log!(id)
+  def delete(conn, %{"id" => id, "project_id" => project_id}) do
+    log = Logs.get_log!(id, project_id)
 
     with {:ok, %Log{}} <- Logs.delete_log(log) do
       send_resp(conn, :no_content, "")
