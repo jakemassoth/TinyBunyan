@@ -1,0 +1,23 @@
+<.header>
+  Listing Filters
+  <:actions>
+    <.link href={~p"/projects/#{@project_id}/filters/new"}>
+      <.button>New Filter</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="filters" rows={@filters} row_click={&JS.navigate(~p"/projects/#{@project_id}/filters/#{&1}")}>
+  <:col :let={filter} label="Query"><%= filter.query %></:col>
+  <:action :let={filter}>
+    <div class="sr-only">
+      <.link navigate={~p"/projects/#{filter.project_id}/filters/#{filter}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/projects/#{filter.project_id}/filters/#{filter}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={filter}>
+    <.link href={~p"/projects/#{filter.project_id}/filters/#{filter}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

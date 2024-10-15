@@ -19,11 +19,14 @@ defmodule TinyBunyan.EphemeralRepo do
 
   def append_log(%Changeset{valid?: true} = changeset) do
     log = apply_changes(changeset)
-    {:commit, [result | _]} = Cachex.get_and_update(
-      TinyBunyan.Cachex, 
-      get_key(log.project_id), 
-      &do_append(log, &1)
-    )
+
+    {:commit, [result | _]} =
+      Cachex.get_and_update(
+        TinyBunyan.Cachex,
+        get_key(log.project_id),
+        &do_append(log, &1)
+      )
+
     {:ok, result}
   end
 
@@ -33,6 +36,7 @@ defmodule TinyBunyan.EphemeralRepo do
 
   def get_logs(project_id) do
     {:ok, res} = Cachex.get(TinyBunyan.Cachex, get_key(project_id))
+
     case res do
       nil -> []
       _ -> res

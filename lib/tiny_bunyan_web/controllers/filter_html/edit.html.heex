@@ -1,0 +1,8 @@
+<.header>
+  Edit Filter <%= @filter.uuid %>
+  <:subtitle>Use this form to manage filter records in your database.</:subtitle>
+</.header>
+
+<.filter_form changeset={@changeset} action={~p"/projects/#{@filter.project_id}/filters/#{@filter}"} />
+
+<.back navigate={~p"/projects/#{@filter.project_id}/filters"}>Back to filters</.back>

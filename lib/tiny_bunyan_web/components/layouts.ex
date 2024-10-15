@@ -10,5 +10,5 @@ defmodule TinyBunyanWeb.Layouts do
   """
   use TinyBunyanWeb, :html
 
-  embed_templates "layouts/*"
+  embed_templates("layouts/*")
 end

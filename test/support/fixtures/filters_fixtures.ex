@@ -1,31 +1,29 @@
-defmodule TinyBunyan.LogsFixtures do
+defmodule TinyBunyan.FiltersFixtures do
   import TinyBunyan.ProjectsFixtures
 
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `TinyBunyan.Logs` context.
+  entities via the `TinyBunyan.Filters` context.
   """
 
   @doc """
-  geenrates a log
+  Generate a filter.
   """
-  def log_fixture(attrs \\ %{}) do
-    # don't create a project if we pass a project id 
+  def filter_fixture(attrs \\ %{}) do
     project_id =
       case attrs do
         {project_id} -> project_id
         _ -> project_fixture().project_id
       end
 
-    {:ok, log} =
+    {:ok, filter} =
       attrs
       |> Enum.into(%{
-        fired_at: DateTime.utc_now(),
-        content: %{},
+        query: "log.content.foo == \"bar\"",
         project_id: project_id
       })
-      |> TinyBunyan.Logs.create_log()
+      |> TinyBunyan.Filters.create_filter()
 
-    log
+    filter
   end
 end

@@ -71,9 +71,9 @@ defmodule TinyBunyanWeb.ProjectControllerTest do
       conn = delete(conn, ~p"/projects/#{project}")
       assert redirected_to(conn) == ~p"/projects"
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, ~p"/projects/#{project}")
-      end
+      end)
     end
   end
 

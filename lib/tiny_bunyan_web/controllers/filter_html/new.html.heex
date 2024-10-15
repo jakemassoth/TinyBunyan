@@ -1,0 +1,8 @@
+<.header>
+  New Filter
+  <:subtitle>Use this form to manage filter records in your database.</:subtitle>
+</.header>
+
+<.filter_form changeset={@changeset} action={~p"/projects/#{@project_id}/filters"} />
+
+<.back navigate={~p"/projects/#{@project_id}/filters"}>Back to filters</.back>

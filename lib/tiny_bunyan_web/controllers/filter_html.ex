@@ -1,13 +1,13 @@
-defmodule TinyBunyanWeb.ProjectHTML do
+defmodule TinyBunyanWeb.FilterHTML do
   use TinyBunyanWeb, :html
 
-  embed_templates("project_html/*")
+  embed_templates("filter_html/*")
 
   @doc """
-  Renders a project form.
+  Renders a filter form.
   """
   attr(:changeset, Ecto.Changeset, required: true)
   attr(:action, :string, required: true)
 
-  def project_form(assigns)
+  def filter_form(assigns)
 end

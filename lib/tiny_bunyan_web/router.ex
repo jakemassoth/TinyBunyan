@@ -2,33 +2,36 @@ defmodule TinyBunyanWeb.Router do
   use TinyBunyanWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, html: {TinyBunyanWeb.Layouts, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, html: {TinyBunyanWeb.Layouts, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", TinyBunyanWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :home
-    resources "/users", UserController
+    get("/", PageController, :home)
+    resources("/users", UserController)
+
     resources "/projects", ProjectController do
-      live "/logs", LogLive.Index, :index
-      live "/logs/:id", LogLive.Show, :show
+      resources("/filters", FilterController)
+      live("/logs", LogLive.Index, :index)
+      live("/logs/:id", LogLive.Show, :show)
     end
   end
 
   scope "/api/v1", TinyBunyanWeb do
-    pipe_through :api
+    pipe_through(:api)
+
     resources "/projects", ProjectController do
-      resources "/logs", LogController, except: [:new, :edit]
+      resources("/logs", LogController, except: [:new, :edit])
     end
   end
 
@@ -42,10 +45,10 @@ defmodule TinyBunyanWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: TinyBunyanWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: TinyBunyanWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end

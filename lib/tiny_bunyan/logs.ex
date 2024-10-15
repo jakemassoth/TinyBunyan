@@ -25,7 +25,7 @@ defmodule TinyBunyan.Logs do
   """
   def list_logs(project_id) do
     from(l in Log, where: l.project_id == ^project_id)
-    |> Repo.all() 
+    |> Repo.all()
     |> Enum.concat(EphemeralRepo.get_logs(project_id))
     |> Enum.sort_by(& &1.fired_at)
   end
@@ -66,29 +66,30 @@ defmodule TinyBunyan.Logs do
   def create_log(attrs \\ %{})
 
   def create_log(attrs) when should_save(attrs) do
-    with {:ok, result} <- 
-      %Log{}
-      |> Log.changeset(attrs)
-      |> Repo.insert() do
+    with {:ok, result} <-
+           %Log{}
+           |> Log.changeset(attrs)
+           |> Repo.insert() do
       notify_subscribers({:ok, result}, :created)
     end
   end
 
   def create_log(attrs) when not should_save(attrs) do
-    with {:ok, result} <- 
-      %Log{}
-      |> Log.changeset(attrs)
-      |> EphemeralRepo.append_log() do
+    with {:ok, result} <-
+           %Log{}
+           |> Log.changeset(attrs)
+           |> EphemeralRepo.append_log() do
       notify_subscribers({:ok, result}, :created)
     end
   end
 
   defp notify_subscribers({:ok, result}, event) do
     PubSub.broadcast(
-      TinyBunyan.PubSub, 
-      "logs:#{result.project_id}", 
+      TinyBunyan.PubSub,
+      "logs:#{result.project_id}",
       {__MODULE__, event, result}
     )
+
     {:ok, result}
   end
 end

@@ -12,7 +12,7 @@ defmodule TinyBunyanWeb.FallbackController do
     |> put_status(:not_found)
     |> put_view(html: TinyBunyanWeb.ErrorHTML, json: TinyBunyanWeb.ErrorJSON)
     |> render(:"404")
-  end  
+  end
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn

@@ -18,7 +18,7 @@ defmodule TinyBunyan.Application do
       # {TinyBunyan.Worker, arg},
       # Start to serve requests, typically the last entry
       TinyBunyanWeb.Endpoint,
-      {Cachex, name: TinyBunyan.Cachex},
+      {Cachex, name: TinyBunyan.Cachex}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

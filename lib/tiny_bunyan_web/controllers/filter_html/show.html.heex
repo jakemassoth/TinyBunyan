@@ -1,0 +1,15 @@
+<.header>
+  Filter <%= @filter.uuid %>
+  <:subtitle>This is a filter record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/projects/#{@filter.project_id}/filters/#{@filter}/edit"}>
+      <.button>Edit filter</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Project"> <%= @filter.project_id %> </:item>
+</.list>
+
+<.back navigate={~p"/projects/#{@filter.project_id}/filters"}>Back to filters</.back>

@@ -5,7 +5,7 @@ defmodule TinyBunyan.Projects.Project do
   @derive {Phoenix.Param, key: :project_id}
   @primary_key {:project_id, :id, autogenerate: true}
   schema "projects" do
-    field :name, :string
+    field(:name, :string)
 
     timestamps(type: :utc_datetime)
   end

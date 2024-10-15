@@ -3,9 +3,9 @@ defmodule TinyBunyan.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
-    field :email, :string
-    field :first_name, :string
-    field :last_name, :string
+    field(:email, :string)
+    field(:first_name, :string)
+    field(:last_name, :string)
 
     timestamps(type: :utc_datetime)
   end

@@ -4,7 +4,7 @@ defmodule TinyBunyanWeb.LogController do
   alias TinyBunyan.Logs
   alias TinyBunyan.Logs.Log
 
-  action_fallback TinyBunyanWeb.FallbackController
+  action_fallback(TinyBunyanWeb.FallbackController)
 
   def index(conn, %{"project_id" => project_id}) do
     logs = Logs.list_logs(project_id)

@@ -12,7 +12,7 @@ defmodule TinyBunyanWeb.LogLive.Index do
   @impl true
   def handle_params(%{"project_id" => project_id}, _uri, socket) do
     {
-      :noreply, 
+      :noreply,
       socket
       |> assign(:project_id, project_id)
       |> assign(:page_title, page_title(project_id))

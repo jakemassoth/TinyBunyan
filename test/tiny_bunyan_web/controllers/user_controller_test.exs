@@ -4,7 +4,11 @@ defmodule TinyBunyanWeb.UserControllerTest do
   import TinyBunyan.AccountsFixtures
 
   @create_attrs %{email: "some email", first_name: "some first_name", last_name: "some last_name"}
-  @update_attrs %{email: "some updated email", first_name: "some updated first_name", last_name: "some updated last_name"}
+  @update_attrs %{
+    email: "some updated email",
+    first_name: "some updated first_name",
+    last_name: "some updated last_name"
+  }
   @invalid_attrs %{email: nil, first_name: nil, last_name: nil}
 
   describe "index" do
@@ -71,9 +75,9 @@ defmodule TinyBunyanWeb.UserControllerTest do
       conn = delete(conn, ~p"/users/#{user}")
       assert redirected_to(conn) == ~p"/users"
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, ~p"/users/#{user}")
-      end
+      end)
     end
   end
 
