@@ -2,7 +2,7 @@
   configs: [
     %{
       name: "default",
-      strict: true,
+      strict: true
     }
   ]
 }

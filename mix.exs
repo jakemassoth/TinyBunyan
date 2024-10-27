@@ -60,7 +60,8 @@ defmodule TinyBunyan.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:cachex, "~> 4.0"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -82,6 +83,12 @@ defmodule TinyBunyan.MixProject do
         "tailwind tiny_bunyan --minify",
         "esbuild tiny_bunyan --minify",
         "phx.digest"
+      ],
+      check: [
+        "compile --warnings-as-errors",
+        "format --check-formatted",
+        "credo",
+        "dialyzer --format short"
       ]
     ]
   end
