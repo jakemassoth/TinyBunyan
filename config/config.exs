@@ -9,7 +9,8 @@ import Config
 
 config :tiny_bunyan,
   ecto_repos: [TinyBunyan.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  ephemeral_logs_to_keep: 5
 
 # Configures the endpoint
 config :tiny_bunyan, TinyBunyanWeb.Endpoint,

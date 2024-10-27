@@ -20,3 +20,6 @@ erl_crash.dump
 phoenix-*.ez
 
 .DS_Store
+priv/mac_listener
+.nix-mix
+.nix-hex

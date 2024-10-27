@@ -1,0 +1,13 @@
+<.header>
+  Log <%= @log.id %>
+  <:subtitle>This is a log record from your database.</:subtitle>
+</.header>
+
+<.list>
+  <:item title="Content"><%= Jason.encode!(@log.content) %></:item>
+  <:item title="Uuid"><%= @log.uuid %></:item>
+  <:item title="Ingested at"><%= @log.inserted_at %></:item>
+  <:item title="Fired at"><%= @log.fired_at %></:item>
+</.list>
+
+<.back navigate={~p"/projects/#{@log.project_id}/logs"}>Back to logs</.back>

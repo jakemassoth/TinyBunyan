@@ -17,7 +17,8 @@ defmodule TinyBunyan.Application do
       # Start a worker by calling: TinyBunyan.Worker.start_link(arg)
       # {TinyBunyan.Worker, arg},
       # Start to serve requests, typically the last entry
-      TinyBunyanWeb.Endpoint
+      TinyBunyanWeb.Endpoint,
+      {Cachex, name: TinyBunyan.Cachex}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

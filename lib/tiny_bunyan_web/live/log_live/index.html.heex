@@ -1,0 +1,15 @@
+<.header>
+  <%= @page_title %>
+</.header>
+
+<.table
+  id="logs"
+  rows={@logs}
+  row_click={fn log -> JS.navigate(~p"/projects/#{log.project_id}/logs/#{log}") end}
+>
+  <:col :let={log} label="Uuid"><%= log.uuid %></:col>
+  <:col :let={log} label="Content"><%= Jason.encode!(log.content) %></:col>
+  <:col :let={log} label="Ingested at"><%= log.inserted_at %></:col>
+  <:col :let={log} label="Fired at"><%= log.fired_at %></:col>
+</.table>
+

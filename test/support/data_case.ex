@@ -29,7 +29,12 @@ defmodule TinyBunyan.DataCase do
 
   setup tags do
     TinyBunyan.DataCase.setup_sandbox(tags)
+    TinyBunyan.DataCase.setup_cache()
     :ok
+  end
+
+  def setup_cache() do
+    Cachex.clear!(TinyBunyan.Cachex)
   end
 
   @doc """
